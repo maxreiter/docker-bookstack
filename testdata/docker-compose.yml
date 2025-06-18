@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MARIADB_DATABASE: "bookstack"
+      MARIADB_USER: "bookstack"
+      MARIADB_PASSWORD: "bookstack"
+      MARIADB_RANDOM_ROOT_PASSWORD: true
+
+  caddy:
+    image: caddy:latest
+    depends_on:
+      - bookstack
+    ports:
+      - "8080:8080"
+    volumes:
+      - $PWD/caddy:/etc/caddy
+      - bookstack-data:/var/www/bookstack
+
+  bookstack:
+    build: ..
+    depends_on:
+      - mariadb
+    environment:
+      DB_HOST: "mariadb:3306"
+      DB_USERNAME: "bookstack"
+      DB_PASSWORD: "bookstack"
+      DB_DATABASE: "bookstack"
+      APP_URL: "http://localhost:8080"
+      APP_ENV: "testing"
+    volumes:
+      - bookstack-data:/var/www/bookstack
+
+volumes:
+  bookstack-data:
