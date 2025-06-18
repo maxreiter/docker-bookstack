@@ -7,6 +7,8 @@ if [ -z "$DB_HOST" ]; then
 	exit 1
 fi
 
+wait4x mysql "$DB_USERNAME:$DB_PASSWORD@tcp($DB_HOST)/$DB_DATABASE"
+
 if [ ! "$(ls -A /var/www/bookstack)" ]; then
 	git clone --single-branch -b release https://github.com/BookStackApp/bookstack.git /var/www/bookstack
 	composer install -d /var/www/bookstack --no-dev
@@ -18,10 +20,7 @@ if [ ! "$(ls -A /var/www/bookstack)" ]; then
 	cd /var/www/bookstack
 
 	/usr/bin/php artisan key:generate
+	/usr/bin/php /var/www/bookstack/artisan migrate
 fi
-
-wait4x mysql "$DB_USERNAME:$DB_PASSWORD@tcp($DB_HOST)/$DB_DATABASE"
-
-/usr/bin/php /var/www/bookstack/artisan migrate
 
 exec php-fpm84
