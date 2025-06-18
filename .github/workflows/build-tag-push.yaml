@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: 
-            - ghcr.io/${{ github.repository_owner }}/bookstack:latest
-            - ghcr.io/${{ github.repository_owner }}/bookstack:${{ github.sha }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/bookstack:latest
+            ghcr.io/${{ github.repository_owner }}/bookstack:${{ github.sha }}
 
