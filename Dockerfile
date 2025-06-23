@@ -3,35 +3,39 @@ FROM alpine:3.22
 # A date-time string as defined by RFC3339
 ARG BUILD_DATE
 
-LABEL org.opencontainers.image.created = "$BUILD_DATE" \
-	org.opencontainers.image.authors = "Max Reiter <mreiter@rtc.edu>" \
-	org.opencontainers.image.url = "https://github.com/maxreiter/docker-bookstack" \
-	org.opencontainers.image.documentation = "https://github.com/maxreiter/docker-bookstack" \
-	org.opencontainers.image.source = "https://github.com/BookStackApp/BookStack" \
-	org.opencontainers.image.version = "25.05.01" \
-	org.opencontainers.image.vendor = "Max Reiter" \
-	org.opencontainers.image.license = "MIT" \
-	org.opencontainers.image.title = "BookStack" \
-	org.opencontainers.image.description = "A platform to create documentation/wiki content built with PHP & Laravel"
-
+LABEL org.opencontainers.image.created="$BUILD_DATE" \
+	org.opencontainers.image.authors="Max Reiter <mreiter@rtc.edu>" \
+	org.opencontainers.image.url="https://github.com/maxreiter/docker-bookstack" \
+	org.opencontainers.image.documentation="https://github.com/maxreiter/docker-bookstack" \
+	org.opencontainers.image.source="https://github.com/BookStackApp/BookStack" \
+	org.opencontainers.image.version="25.05.01" \
+	org.opencontainers.image.vendor="BookStack" \
+	org.opencontainers.image.license="MIT" \
+	org.opencontainers.image.title="BookStack" \
+	org.opencontainers.image.description="A platform to create documentation/wiki content built with PHP & Laravel"
 
 # Set up container dependencies
 RUN <<EOF
 	set -eux
 
-	# Install base dependencies
-	apk add --no-cache ca-certificates curl openssl tar xz wait4x git
+	# Install tools we use
+	apk add --no-cache git wait4x
 
-	# Install PHP, FPM and needed modules
-	apk add --no-cache php84 php84-fpm php84-gd php84-dom php84-iconv \
-	php84-mbstring php84-mysqlnd php84-openssl php84-pdo php84-pdo_mysql \
-	php84-tokenizer php84-xml php84-xmlwriter php84-simplexml php84-phar \
-	php84-zip php84-session php84-fileinfo php84-curl
+	# Install PHP dependencies
+	apk add --no-cache curl openssl gd openldap
+
+	# Install PHP and extensions
+	apk add --no-cache \
+		php84 php84-fpm \
+		php84-gd php84-dom php84-iconv php84-mbstring php84-mysqlnd php84-openssl \
+		php84-pdo php84-pdo_mysql php84-tokenizer php84-xml php84-xmlwriter \
+		php84-simplexml php84-phar php84-zip php84-session php84-fileinfo \
+		php84-curl
 
 	# Symlink /usr/bin/php84 to /usr/bin/php for ease of access
 	ln -sf /usr/bin/php84 /usr/bin/php
 
-	# Download the composer installer manually
+	# Download, verify and install composer by hand
 	SIG="$(curl -fsSL https://composer.github.io/installer.sig)"
 	curl -fsSL https://getcomposer.org/installer -o composer-setup.php
 	CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"

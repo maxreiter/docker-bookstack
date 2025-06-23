@@ -1,7 +1,7 @@
 http://localhost:8080
 
 root /var/www/bookstack/public
+file_server
 php_fastcgi bookstack:9000 {
 	capture_stderr
 }
-file_server

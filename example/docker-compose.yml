@@ -7,16 +7,6 @@ services:
       MARIADB_PASSWORD: "bookstack"
       MARIADB_RANDOM_ROOT_PASSWORD: true
 
-  caddy:
-    image: caddy:latest
-    depends_on:
-      - bookstack
-    ports:
-      - "8080:8080"
-    volumes:
-      - $PWD/caddy:/etc/caddy
-      - bookstack-data:/var/www/bookstack
-
   bookstack:
     build: ..
     depends_on:
@@ -30,6 +20,17 @@ services:
       APP_ENV: "testing"
     volumes:
       - bookstack-data:/var/www/bookstack
+
+  caddy:
+    image: caddy:latest
+    depends_on:
+      - bookstack
+    ports:
+      - "8080:8080"
+    volumes:
+      - $PWD/caddy:/etc/caddy
+      - bookstack-data:/var/www/bookstack
+
 
 volumes:
   bookstack-data:

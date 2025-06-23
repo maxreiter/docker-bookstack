@@ -19,7 +19,6 @@ if [ ! "$(ls -A /var/www/bookstack)" ]; then
 
 	cd /var/www/bookstack
 
-	/usr/bin/php artisan key:generate
 	/usr/bin/php /var/www/bookstack/artisan migrate
 fi
 
