@@ -14,7 +14,7 @@ if [ ! "$(ls -A /var/www/bookstack)" ]; then
 		--location \
 		--remote-name \
 		--output-dir /var/www/bookstack \
-		https://api.github.com/BookStackApp/BookStack/tarball/$BOOKSTACK_VERSION
+		https://api.github.com/repos/BookStackApp/BookStack/tarball/$BOOKSTACK_VERSION
 
 	tar x \
 		-f /var/www/bookstack/$BOOKSTACK_VERSION \
