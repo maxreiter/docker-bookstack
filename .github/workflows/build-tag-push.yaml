@@ -17,6 +17,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Prepare build arguments
+        run: |
+          BUILD_DATE=$(date --rfc-3339=seconds)
+          echo BUILD_DATE=$BUILD_DATE >> $GITHUB_ENV
+
       - name: Login to the GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -31,4 +36,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/bookstack:latest
             ghcr.io/${{ github.repository_owner }}/bookstack:${{ github.sha }}
+          build-args: |
+            BUILD_DATE=$BUILD_DATE
 

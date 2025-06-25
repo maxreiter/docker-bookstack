@@ -3,12 +3,15 @@ FROM alpine:3.22
 # A date-time string as defined by RFC3339
 ARG BUILD_DATE
 
-LABEL org.opencontainers.image.created="$BUILD_DATE" \
+# Verison of BookStack to deploy
+ENV BOOKSTACK_VERSION=v25.05.1
+
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
 	org.opencontainers.image.authors="Max Reiter <mreiter@rtc.edu>" \
 	org.opencontainers.image.url="https://github.com/maxreiter/docker-bookstack" \
 	org.opencontainers.image.documentation="https://github.com/maxreiter/docker-bookstack" \
 	org.opencontainers.image.source="https://github.com/BookStackApp/BookStack" \
-	org.opencontainers.image.version="25.05.01" \
+	org.opencontainers.image.version="${BOOKSTACK_VERSION}" \
 	org.opencontainers.image.vendor="BookStack" \
 	org.opencontainers.image.license="MIT" \
 	org.opencontainers.image.title="BookStack" \
